@@ -1,0 +1,17 @@
+{
+  "name": "scrapfifa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scrap.js",
+  "type": "commonjs",
+  "scripts": {
+    "run": "node scrap.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.58.0",
+    "web-scraper-js": "^1.1.0"
+  }
+}
