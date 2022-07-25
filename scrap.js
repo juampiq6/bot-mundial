@@ -6,6 +6,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
+const bot = new TelegramBot(TOKEN, { polling: false });
+
 const arabia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163862/lang/en'
 const mexico = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163878/lang/en'
 const polonia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163893/lang/en'
@@ -48,38 +50,38 @@ const lusailfinalcat3 = 'v2-seatcat_101468143385'
 let lastErrorDate
 
 const scrapear = async (match, url, cat1) => {
-    try {
-        let cat1selector = Number(cat1)
-        let cat2selector = cat1selector + 1
-        let cat3selector = cat1selector + 2
+    let cat1selector = Number(cat1)
+    let cat2selector = cat1selector + 1
+    let cat3selector = cat1selector + 2
 
 
-        let result = await webscraper.scrape({
-            url: url,
-            tags: {
-                text: {
-                    "1": `.v2-seatcat_${cat1selector} .quantity div, .v2-seatcat_${cat1selector} .quantity select`,
-                    "2": `.v2-seatcat_${cat2selector} .quantity div, .v2-seatcat_${cat2selector} .quantity select`,
-                    "3": `.v2-seatcat_${cat3selector} .quantity div, .v2-seatcat_${cat3selector} .quantity select`,
-                },
-            }
-        });
-        for (const key in result) {
-            let value = result[key].toString()
-            let unavailable = value == '' || value.includes('unavailable')
-            if (!unavailable) {
-                console.log(match + ' CAT ' + key + ' Disponible')
-                sendTelegram(`${match} CAT ${category} DISPONIBLES \n`)
-            }
+    let result = await webscraper.scrape({
+        url: url,
+        tags: {
+            text: {
+                "1": `.v2-seatcat_${cat1selector} .quantity div, .v2-seatcat_${cat1selector} .quantity select`,
+                "2": `.v2-seatcat_${cat2selector} .quantity div, .v2-seatcat_${cat2selector} .quantity select`,
+                "3": `.v2-seatcat_${cat3selector} .quantity div, .v2-seatcat_${cat3selector} .quantity select`,
+            },
         }
-    } catch (error) {
+    });
+    for (const key in result) {
+        let value = result[key].toString()
+        let unavailable = value == '' || value.includes('unavailable')
+        if (!unavailable) {
+            console.log(match + ' CAT ' + key + ' Disponible')
+            sendTelegram(`${match} CAT ${category} DISPONIBLES \n`)
+        }
     }
-
 };
 
 const sendTelegram = async (msg) => {
-    const bot = new TelegramBot(TOKEN, { polling: false });
-    bot.sendMessage(CHAT_ID, msg)
+    try {
+        bot.sendMessage(CHAT_ID, msg)
+    } catch (e) {
+        console.log('ERROR mandando mensaje en Telegram!');
+        process.exit(1);
+    }
 };
 
 const main = () => {
