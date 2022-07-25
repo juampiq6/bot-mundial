@@ -6,7 +6,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const TOKEN = process.env.TELEGRAM_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
-const bot = new TelegramBot(TOKEN, { polling: false });
+var bot
 
 const arabia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163862/lang/en'
 const mexico = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163878/lang/en'
@@ -65,20 +65,24 @@ const scrapear = async (match, url, cat1) => {
             },
         }
     });
+    var fullText = ''
     for (const key in result) {
         let value = result[key].toString()
         let unavailable = value == '' || value.includes('unavailable')
         if (!unavailable) {
-            console.log(match + ' CAT ' + key + ' Disponible')
-            sendTelegram(`${match} CAT ${category} DISPONIBLES \n`)
+            var txt = `${match} CAT ${category} DISPONIBLES \n`
+            console.log(txt)
+            fullText = fullText + txt;
         }
     }
+    return fullText;
 };
 
 const sendTelegram = async (msg) => {
     try {
-        bot.sendMessage(CHAT_ID, msg)
+        await bot.sendMessage(CHAT_ID, msg)
     } catch (e) {
+        console.log(e)
         console.log('ERROR mandando mensaje en Telegram!');
         process.exit(1);
     }
@@ -86,18 +90,33 @@ const sendTelegram = async (msg) => {
 
 const main = () => {
     const intervalSec = 12
+    bot = new TelegramBot(TOKEN, { polling: false });
     try {
         sendTelegram(`El bot esta laburando ;) (${intervalSec} seg)`);
         const interval = setInterval(function () {
             console.log(new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }))
-            scrapear('ARABIA', arabia, lusailcat1);
-            scrapear('MEXICO', mexico, lusailcat1);
-            scrapear('POLONIA', polonia, stadium974cat1);
-            scrapear('OCTAVOS', octavos, binalicat1);
-            scrapear('CUARTOS', cuartos, lusailcat1);
-            scrapear('SEMI ARG', semiarg, lusailsemicat1);
-            scrapear('SEMI OTRA', semiotra, albaitsemicat1);
-            scrapear('FINAL', final, lusailfinalcat1);
+            var promise = Promise.allSettled([
+                scrapear('ARABIA', arabia, lusailcat1),
+                scrapear('MEXICO', mexico, lusailcat1),
+                scrapear('POLONIA', polonia, stadium974cat1),
+                scrapear('OCTAVOS', octavos, binalicat1),
+                scrapear('CUARTOS', cuartos, lusailcat1),
+                scrapear('SEMI ARG', semiarg, lusailsemicat1),
+                scrapear('SEMI OTRA', semiotra, albaitsemicat1),
+                scrapear('FINAL', final, lusailfinalcat1),
+            ],
+            )
+            promise.then((promisesResults) => {
+                var finalText = ''
+                promisesResults.forEach((e) => {
+                    if (e.value != '') {
+                        finalText = finalText + e.value
+                    }
+                });
+                if (finalText != '') {
+                    sendTelegram(finalText)
+                }
+            })
         }, intervalSec * 1000);
     } catch (error) {
         sendTelegram('EL BOT FALLO! Probando de nuevo en 5 mins');

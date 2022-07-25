@@ -7,5 +7,5 @@ const CHAT_ID = process.env.CHAT_ID ?? '-631225392';
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TOKEN, { polling: false });
 
-bot.sendMessage('-631225392', 'Mensaje de prueba del bot')
+bot.sendMessage(CHAT_ID, 'Mensaje de prueba del bot')
 
