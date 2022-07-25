@@ -66,7 +66,7 @@ const scrapear = async (match, url, cat1) => {
         });
         for (const key in result) {
             let value = result[key].toString()
-            let unavailable = value.includes('unavailable')
+            let unavailable = value == '' || value.includes('unavailable')
             if (!unavailable) {
                 console.log(match + ' CAT ' + key + ' Disponible')
                 sendTelegram(`${match} CAT ${category} DISPONIBLES \n`)
