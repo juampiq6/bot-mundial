@@ -17,37 +17,24 @@ const semiarg = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event
 const semiotra = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163916/lang/en'
 const final = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163918/lang/en'
 const brasilserbia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163870/lang/en'
+const cuartos60 = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163914/lang/en'
+const cuartos59 = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163913/lang/en'
+
 
 // polonia
 const stadium974cat1 = '101462819875'
-// const stadium974cat1 = 'v2-seatcat_101462819875'
-const stadium974cat2 = 'v2-seatcat_101462819876'
-const stadium974cat3 = 'v2-seatcat_101462819877'
 // mexico, arabia y cuartos
 const lusailcat1 = '101468126516'
-// const lusailcat1 = 'v2-seatcat_101468126516'
-const lusailcat2 = 'v2-seatcat_101468126517'
-const lusailcat3 = 'v2-seatcat_101468126518'
 // octavos
 const binalicat1 = '101461688877'
-// const binalicat1 = 'v2-seatcat_101461688877'
-const binalicat2 = 'v2-seatcat_101461688878'
-const binalicat3 = 'v2-seatcat_101461688879'
 // semifinal arg
 const lusailsemicat1 = '101468126558'
-// const lusailsemicat1 = 'v2-seatcat_101468126558'
-const lusailsemicat2 = 'v2-seatcat_101468126559'
-const lusailsemicat3 = 'v2-seatcat_101468126560'
 // otra semi
 const albaitsemicat1 = '101467587113'
-// const albaitsemicat1 = 'v2-seatcat_101467587113'
-const albaitsemicat2 = 'v2-seatcat_101467587114'
-const albaitsemicat3 = 'v2-seatcat_101467587115'
 // final
 const lusailfinalcat1 = '101468143383'
-// const lusailfinalcat1 = 'v2-seatcat_101468143383'
-const lusailfinalcat2 = 'v2-seatcat_101468143384'
-const lusailfinalcat3 = 'v2-seatcat_101468143385'
+// otros cuartos
+const altuamaStadium = '101467463857'
 let lastErrorDate
 
 const scrapear = async (match, url, cat1) => {
@@ -72,10 +59,10 @@ const scrapear = async (match, url, cat1) => {
         let value = result[key].toString()
         let unavailable = value == '' || value.includes('unavailable')
         if (!unavailable) {
-            var txt = `${match} CAT ${category} DISPONIBLES \n`
+            var txt = `${match} CAT${category}\n${url}\n`
             fullText = fullText + txt;
         }
-        if (txt != '') {
+        if (txt != '' && txt != undefined) {
             console.log(txt)
         }
     }
@@ -109,6 +96,8 @@ const main = () => {
                 scrapear('SEMI OTRA', semiotra, albaitsemicat1),
                 scrapear('FINAL', final, lusailfinalcat1),
                 scrapear('BRASIL SERBIA', brasilserbia, lusailcat1),
+                scrapear('CUARTOS 60', cuartos60, altuamaStadium),
+                scrapear('CUARTOS 59', cuartos59, altuamaStadium),
             ],
             )
             promise.then((promisesResults) => {
