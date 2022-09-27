@@ -109,7 +109,7 @@ const main = () => {
             promise.then((promisesResults) => {
                 var finalText = ''
                 promisesResults.forEach((e) => {
-                    if (e.value != '') {
+                    if (e.value != '' && e.value != undefined) {
                         finalText = finalText + e.value
                     }
                 });
