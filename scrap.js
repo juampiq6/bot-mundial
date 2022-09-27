@@ -16,6 +16,7 @@ const cuartos = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event
 const semiarg = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163915/lang/en'
 const semiotra = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163916/lang/en'
 const final = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163918/lang/en'
+const brasilserbia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163870/lang/en'
 
 // polonia
 const stadium974cat1 = '101462819875'
@@ -104,6 +105,7 @@ const main = () => {
                 scrapear('SEMI ARG', semiarg, lusailsemicat1),
                 scrapear('SEMI OTRA', semiotra, albaitsemicat1),
                 scrapear('FINAL', final, lusailfinalcat1),
+                scrapear('BRASIL SERBIA', brasilserbia, lusailcat1),
             ],
             )
             promise.then((promisesResults) => {
