@@ -68,12 +68,15 @@ const scrapear = async (match, url, cat1) => {
     });
     var fullText = ''
     for (const key in result) {
+        let category = key
         let value = result[key].toString()
         let unavailable = value == '' || value.includes('unavailable')
         if (!unavailable) {
             var txt = `${match} CAT ${category} DISPONIBLES \n`
-            console.log(txt)
             fullText = fullText + txt;
+        }
+        if (txt != '') {
+            console.log(txt)
         }
     }
     return fullText;
