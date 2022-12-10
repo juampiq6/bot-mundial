@@ -8,40 +8,20 @@ const CHAT_ID = process.env.CHAT_ID;
 
 var bot
 
-const arabia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163862/lang/en'
-const mexico = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163878/lang/en'
-const polonia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163893/lang/en'
-const octavos = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163904/lang/en'
-const cuartos = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163911/lang/en'
 const semiarg = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163915/lang/en'
-const semiotra = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163916/lang/en'
 const final = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163918/lang/en'
-const brasilserbia = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163870/lang/en'
-const cuartos60 = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163914/lang/en'
-const cuartos59 = 'https://fcfs-intl.fwc22.tickets.fifa.com/secure/selection/event/seat/performance/101437163913/lang/en'
 
 
-// polonia
-const stadium974cat1 = '101462819875'
-// mexico, arabia y cuartos
-const lusailcat1 = '101468126516'
-// octavos
-const binalicat1 = '101461688877'
 // semifinal arg
 const lusailsemicat1 = '101468126558'
-// otra semi
-const albaitsemicat1 = '101467587113'
 // final
 const lusailfinalcat1 = '101468143383'
-// otros cuartos
-const altuamaStadium = '101467463857'
 let lastErrorDate
 
 const scrapear = async (match, url, cat1) => {
     let cat1selector = Number(cat1)
     let cat2selector = cat1selector + 1
     let cat3selector = cat1selector + 2
-
 
     let result = await webscraper.scrape({
         url: url,
@@ -80,24 +60,15 @@ const sendTelegram = async (msg) => {
 };
 
 const main = () => {
-    const intervalSec = 12
+    const intervalSec = 4
     bot = new TelegramBot(TOKEN, { polling: false });
     try {
         sendTelegram(`El bot esta laburando ;) (${intervalSec} seg)`);
         const interval = setInterval(function () {
             console.log(new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }))
             var promise = Promise.allSettled([
-                scrapear('ARABIA', arabia, lusailcat1),
-                scrapear('MEXICO', mexico, lusailcat1),
-                scrapear('POLONIA', polonia, stadium974cat1),
-                scrapear('OCTAVOS', octavos, binalicat1),
-                scrapear('CUARTOS', cuartos, lusailcat1),
-                scrapear('SEMI ARG', semiarg, lusailsemicat1),
-                scrapear('SEMI OTRA', semiotra, albaitsemicat1),
+                scrapear('SEMI', semiarg, lusailsemicat1),
                 scrapear('FINAL', final, lusailfinalcat1),
-                scrapear('BRASIL SERBIA', brasilserbia, lusailcat1),
-                scrapear('CUARTOS 60', cuartos60, altuamaStadium),
-                scrapear('CUARTOS 59', cuartos59, altuamaStadium),
             ],
             )
             promise.then((promisesResults) => {
